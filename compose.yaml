@@ -1,6 +1,7 @@
 ---
 services:
   php:
+    container_name: php
     image: ${IMAGES_PREFIX:-}app-php
     restart: unless-stopped
     environment:
@@ -29,11 +30,32 @@ services:
         published: ${HTTP3_PORT:-443}
         protocol: udp
 
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
+  rabbitmq:
+    container_name: rmq
+    restart: unless-stopped
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+    ports:
+      - "9002:5672"
+      - "9003:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
-###> doctrine/doctrine-bundle ###
   database:
+    container_name: db
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
@@ -46,16 +68,9 @@ services:
       start_period: 60s
     volumes:
       - database_data:/var/lib/postgresql/data:rw
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
 
 volumes:
   caddy_data:
   caddy_config:
-
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
-
-###> doctrine/doctrine-bundle ###
+  rabbitmq_data:
   database_data:
-###< doctrine/doctrine-bundle ###
