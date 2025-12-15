@@ -7,11 +7,11 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRect
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/src',
+        __DIR__.'/src',
     ])
     ->withSkip([
-        __DIR__ . '/var',
-        __DIR__ . '/vendor',
+        __DIR__.'/var',
+        __DIR__.'/vendor',
     ])
     ->withPhpSets(php84: true)
     ->withPreparedSets(
@@ -26,4 +26,3 @@ return RectorConfig::configure()
         AddVoidReturnTypeWhereNoReturnRector::class,
     ])
     ->withImportNames();
-
