@@ -187,6 +187,11 @@ make env
 make trust-cert
 ```
 
+**Install git hooks:**
+```bash
+make install-hooks
+```
+
 ### Common Development Commands
 
 These commands should be run from inside the PHP container. First, access it with `make sh`, then run:
@@ -286,6 +291,28 @@ composer qa
 make sh
 composer qa
 ```
+
+### Git Hooks
+
+This project includes a pre-commit hook that runs code quality checks before each commit.
+
+**Install the git hooks:**
+```bash
+make install-hooks
+```
+
+The pre-commit hook will automatically run:
+- PHP CS Fixer (code style check)
+- Rector (refactoring check)
+
+If any issues are found, the commit will be blocked. You can fix the issues with:
+```bash
+make sh
+composer cs-fix      # Fix code style issues
+composer rector-fix  # Fix refactoring issues
+```
+
+**Note:** The containers must be running (`make up`) for the pre-commit hook to work.
 
 ### CI/CD
 

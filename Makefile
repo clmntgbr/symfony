@@ -6,7 +6,7 @@ PHP_CONT = $(DOCKER_COMP) exec php
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help up down remove enter
+.PHONY        : help up down remove sh trust-cert env entity schema install-hooks
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -25,7 +25,7 @@ remove: ## Remove all containers and volumes
 sh: ## Connect to the PHP container
 	@$(PHP_CONT) sh
 
-trust-cert:
+trust-cert: ## Install local SSL certificate
 	@echo "Installing local SSL certificate..."
 	@docker cp php:/data/caddy/pki/authorities/local/root.crt /tmp/root.crt
 	@if [ "$$(uname)" = "Darwin" ]; then \
@@ -46,11 +46,19 @@ trust-cert:
 	fi
 	@rm /tmp/root.crt
 
-env:
+env: ## Show environment variables
 	@$(PHP_CONT) bin/console debug:dotenv
 
-entity:
+## —— Git 🔧 ———————————————————————————————————————————————————————————————————
+install-hooks: ## Install git hooks for code quality
+	@echo "Installing git hooks..."
+	@cp .githooks/pre-commit .git/hooks/pre-commit
+	@chmod +x .git/hooks/pre-commit
+	@echo "✅ Git hooks installed successfully!"
+
+## —— Symfony 🎵 ———————————————————————————————————————————————————————————————
+entity: ## Create a new entity
 	@$(PHP_CONT) bin/console make:entity
 
-schema: 
+schema: ## Update database schema
 	@$(PHP_CONT) bin/console doctrine:schema:update --force
