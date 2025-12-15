@@ -62,6 +62,20 @@ This project is a complete Symfony application template with Docker integration,
 
 ## 🚀 Getting Started
 
+### Quick Start
+
+This project uses a Makefile for common Docker operations:
+
+```bash
+make          # Show all available commands
+make up       # Start all containers
+make down     # Stop all containers
+make sh       # Access the PHP container
+make remove   # Remove containers and volumes
+```
+
+For detailed setup instructions, see below.
+
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) 20.10+
@@ -75,31 +89,33 @@ This project is a complete Symfony application template with Docker integration,
    cd symfony-docker
    ```
 
-2. **Build Docker images**
-   ```bash
-   docker compose build --pull --no-cache
-   ```
-
-3. **(Optional) Configure environment**
+2. **(Optional) Configure environment**
    
    Create a `.env` file to override default values (see [Environment Variables](#environment-variables) section below).
    The application will work with defaults if no `.env` file is provided.
 
-4. **Start the application**
+3. **Start the application**
    ```bash
-   docker compose up --wait
+   make up
    ```
    
-   The `--wait` flag ensures all services are healthy before the command returns.
+   This command will start all Docker containers in detached mode and wait for services to be ready.
+
+4. **(Optional) Install SSL certificate**
+   
+   To trust the local SSL certificate and avoid browser warnings:
+   ```bash
+   make trust-cert
+   ```
 
 5. **Access the application**
    - HTTP: `http://localhost`
-   - HTTPS: `https://localhost` (accept the self-signed certificate)
+   - HTTPS: `https://localhost`
    - Mercure Hub: `https://localhost/.well-known/mercure`
 
 6. **Stop the application**
    ```bash
-   docker compose down --remove-orphans
+   make down
    ```
 
 ## 💻 Development
@@ -137,35 +153,72 @@ CADDY_MERCURE_JWT_SECRET=!ChangeThisMercureHubJWTSecretKey!
 | PostgreSQL | `db`      | 5432 (internal)  | Database                   |
 | RabbitMQ   | `rmq`     | 9002, 9003       | Message broker & dashboard |
 
-### Common Commands
+### Makefile Commands
+
+This project includes a Makefile with helpful shortcuts. Run `make` or `make help` to see all available commands.
+
+**Start containers:**
+```bash
+make up
+```
+
+**Stop containers:**
+```bash
+make down
+```
+
+**Remove containers and volumes:**
+```bash
+make remove
+```
 
 **Access PHP container:**
 ```bash
-docker compose exec php sh
+make sh
 ```
+
+**View environment variables:**
+```bash
+make env
+```
+
+**Install SSL certificate:**
+```bash
+make trust-cert
+```
+
+### Common Development Commands
+
+These commands should be run from inside the PHP container. First, access it with `make sh`, then run:
 
 **Run Symfony console:**
 ```bash
-docker compose exec php bin/console [command]
+bin/console [command]
 ```
 
 **Install Composer dependencies:**
 ```bash
-docker compose exec php composer install
+composer install
 ```
 
 **Database migrations:**
 ```bash
 # Create migration
-docker compose exec php bin/console make:migration
+bin/console make:migration
 
 # Run migrations
-docker compose exec php bin/console doctrine:migrations:migrate
+bin/console doctrine:migrations:migrate
 ```
 
 **Clear cache:**
 ```bash
-docker compose exec php bin/console cache:clear
+bin/console cache:clear
+```
+
+Alternatively, you can run commands directly from your host machine:
+```bash
+docker compose exec php bin/console [command]
+docker compose exec php composer install
 ```
 
 ### XDebug
@@ -182,8 +235,9 @@ This project includes three quality assurance tools that run automatically in CI
 # Run analysis
 composer phpstan
 
-# Inside Docker
-docker compose exec php composer phpstan
+# Inside Docker (first access container with make sh)
+make sh
+composer phpstan
 ```
 
 Configuration: `phpstan.neon.dist`
@@ -197,9 +251,10 @@ composer cs-check
 # Fix code style
 composer cs-fix
 
-# Inside Docker
-docker compose exec php composer cs-check
-docker compose exec php composer cs-fix
+# Inside Docker (first access container with make sh)
+make sh
+composer cs-check
+composer cs-fix
 ```
 
 Configuration: `.php-cs-fixer.dist.php`
@@ -213,9 +268,10 @@ composer rector-check
 # Apply refactoring
 composer rector-fix
 
-# Inside Docker
-docker compose exec php composer rector-check
-docker compose exec php composer rector-fix
+# Inside Docker (first access container with make sh)
+make sh
+composer rector-check
+composer rector-fix
 ```
 
 Configuration: `rector.php`
@@ -226,8 +282,9 @@ Configuration: `rector.php`
 # Run all checks at once
 composer qa
 
-# Inside Docker
-docker compose exec php composer qa
+# Inside Docker (first access container with make sh)
+make sh
+composer qa
 ```
 
 ### CI/CD

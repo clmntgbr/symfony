@@ -45,3 +45,6 @@ trust-cert:
 		echo "Unknown operating system. Please install the certificate manually from: /tmp/root.crt"; \
 	fi
 	@rm /tmp/root.crt
+
+env:
+	@$(PHP_CONT) bin/console debug:dotenv
