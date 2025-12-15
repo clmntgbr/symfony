@@ -28,7 +28,7 @@
         "phpstan/phpstan": "^1.12.32",
         "phpstan/phpstan-symfony": "^1.4.16",
         "rector/rector": "^1.2.10",
-        "symfony/maker-bundle": "^1.65"
+        "symfony/maker-bundle": "^1.65.1"
     },
     "config": {
         "allow-plugins": {
