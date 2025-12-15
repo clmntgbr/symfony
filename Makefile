@@ -57,8 +57,14 @@ install-hooks: ## Install git hooks for code quality
 	@echo "✅ Git hooks installed successfully!"
 
 ## —— Symfony 🎵 ———————————————————————————————————————————————————————————————
-entity: ## Create a new entity
-	@$(PHP_CONT) bin/console make:entity
+rector: ## Run rector
+	@$(PHP_CONT) composer rector-fix
 
-schema: ## Update database schema
-	@$(PHP_CONT) bin/console doctrine:schema:update --force
+phpstan: ## Run phpstan
+	@$(PHP_CONT) composer phpstan
+
+php-cs-fixer: ## Run php-cs-fixer
+	@$(PHP_CONT) composer cs-fix
+
+qa: ## Run all qa tools
+	@$(PHP_CONT) composer qa-fix

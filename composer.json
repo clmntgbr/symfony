@@ -81,9 +81,14 @@
         "rector-check": "vendor/bin/rector process --dry-run",
         "rector-fix": "vendor/bin/rector process",
         "qa": [
-            "@phpstan",
             "@cs-check",
-            "@rector-check"
+            "@rector-check",
+            "@phpstan"
+        ],
+        "qa-fix": [
+            "@cs-fix",
+            "@rector-fix",
+            "@phpstan"
         ]
     },
     "conflict": {
