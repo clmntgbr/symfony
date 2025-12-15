@@ -27,7 +27,8 @@
         "friendsofphp/php-cs-fixer": "^3.92",
         "phpstan/phpstan": "^1.12.32",
         "phpstan/phpstan-symfony": "^1.4.16",
-        "rector/rector": "^1.2.10"
+        "rector/rector": "^1.2.10",
+        "symfony/maker-bundle": "^1.65"
     },
     "config": {
         "allow-plugins": {

@@ -48,3 +48,9 @@ trust-cert:
 
 env:
 	@$(PHP_CONT) bin/console debug:dotenv
+
+entity:
+	@$(PHP_CONT) bin/console make:entity
+
+schema: 
+	@$(PHP_CONT) bin/console doctrine:schema:update --force
