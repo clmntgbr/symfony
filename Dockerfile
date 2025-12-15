@@ -38,6 +38,7 @@ RUN set -eux; \
 		xml \
 		sodium \
 		imagick \
+		sodium \
 	;
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
