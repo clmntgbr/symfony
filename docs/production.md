@@ -124,11 +124,6 @@ To deploy on Kubernetes, take a look
 at [the Helm chart provided with API Platform](https://api-platform.com/docs/deployment/kubernetes/),
 which can be easily adapted for use with Symfony Docker.
 
-## Passing local environment variables to containers
-
-By default, `.env.local` and `.env.*.local` files are excluded from production images.
-If you want to pass them to your containers, you can use the [`env_file` attribute](https://docs.docker.com/compose/environment-variables/set-environment-variables/#use-the-env_file-attribute):
-
 ```yaml
 # compose.prod.yml
 
